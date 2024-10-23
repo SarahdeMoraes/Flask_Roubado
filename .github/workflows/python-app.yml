@@ -1,20 +1,19 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
-
-name: PipelineFlask
-
+name: Python application
+ 
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
-
+ 
+permissions:
+  contents: read
+ 
 jobs:
   build:
-
+ 
     runs-on: ubuntu-latest
-
+ 
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python 3.10
@@ -26,17 +25,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    
-    - name: Teste 
-      run: coverage run app_test.py
-
-    - name: Relatorio do teste
-      run: coverage report -m
-
-    - name: EC2 salaH
+    - name: Deploy no EC2 - AWS
       run: |
-            echo "${{secrets.AWS_EC2_SALAH}}" >private_key && chmod 600 private_key
-            ssh -o StrictHostKeyChecking=no -i private_key ubuntu@ec2-52-1-29-164.compute-1.amazonaws.com
-            "cd Flask_Roubado/;git pull;./iniciarApp.sh;"
-            
-
+            echo "Conectando no EC2"
+            echo "${{secrets.AWS_EC2_SALAH}}" > private_key && chmod 600 private_key 
+            ssh -o StrictHostKeyChecking=no -i private_key ubuntu@ec2-52-1-29-164.compute-1.amazonaws.com "
+                cd Flask_Roubado/;git pull;./iniciarApp.sh"
