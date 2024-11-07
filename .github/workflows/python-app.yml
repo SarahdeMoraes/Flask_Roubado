@@ -31,3 +31,9 @@ jobs:
             echo "${{secrets.AWS_EC2_SALAH}}" > private_key && chmod 600 private_key 
             ssh -o StrictHostKeyChecking=no -i private_key ubuntu@ec2-52-0-130-28.compute-1.amazonaws.com "
                 cd Flask_Roubado/;git pull;./iniciarApp.sh"
+
+    - name: Render Deploy Actions
+      uses: johnbeynon/render-deploy-action@v0.0.8
+      with: 
+        service-id: srv-csmiep3qf0us738oeamg
+        api-key: rnd_9BU4XHk8EYlqOzzc2t4JrciDN45T
